@@ -1,0 +1,5 @@
+0;alma@gmail.com;alma;0;alma;alma;alma;Budapest alma utca 42.;-1;-1
+1;gyozo;gyozo;0;gyozo;gyozo;;Budapest Kiss Alma utca 10;-1;-1
+2;uzletv;uzletv;1
+3;admin;admin;2;1
+4;3;;0;alma;;;;-1;-1

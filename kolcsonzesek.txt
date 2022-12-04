@@ -1,0 +1,3 @@
+ABC123;BMW;Mini;benzin;5;kek;0;-1;ABC123;2021.12.06;1000000;-1
+DRG123;Trabant;E105;benzin;5;feher;1;-1;DRG123;2021.12.01;500000;-1
+RKN465;Tesla;Model 3;villany;6;kek;2;1;RKN465;2021.12.07;20000000;-1
