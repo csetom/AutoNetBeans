@@ -22,7 +22,7 @@ import java.util.Date;
 public class Menu {
 
     private ArrayList<Felhasznalo> felhasznalok = new ArrayList<>();
-    private AutoKolcsonzes kolcsonzesek = new AutoKolcsonzes();
+    private AutoKolcsonzes autoKolcsonzes = new AutoKolcsonzes();
     private String email = "";
     private BufferedReader input;
     private String valasztottid = "";
@@ -177,11 +177,20 @@ public class Menu {
             @Override
             public void run() {
                 try (FileWriter writer = new FileWriter("kolcsonzesek.txt")) {
-                    for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                        writer.write(kolcsonzesek.getAutok(i).toString() + kolcsonzesek.getKolcsonzesek(i).toString());
+                    for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                        writer.write(autoKolcsonzes.getAutok(i).toString() + autoKolcsonzes.getKolcsonzesek(i).toString());
                     }
                     writer.close();
                     System.out.println("Fajlba kiiras megtortent(kolcsonzesek).");
+                } catch (IOException ex) {
+                    System.out.println("Nem hozhato letre a fajl!");
+                }
+                try (FileWriter writer = new FileWriter("utanfutok.txt")) {
+                    for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                        writer.write(autoKolcsonzes.getUtanfutok().get(i).toString() + autoKolcsonzes.getUtanfutoKolcsonzesek().get(i).toString());
+                    }
+                    writer.close();
+                    System.out.println("Fajlba kiiras megtortent(utanfutok).");
                 } catch (IOException ex) {
                     System.out.println("Nem hozhato letre a fajl!");
                 }
@@ -228,8 +237,8 @@ public class Menu {
                     {
                         String[] tmp;
                         while ((tmp = BuffReader.readLine().split(";")) != null) {
-                            kolcsonzesek.addAutok(new Auto(tmp[0], tmp[1], tmp[2], tmp[3], Integer.parseInt(tmp[4]), tmp[5]));
-                            kolcsonzesek.addKolcsonzesek(new Kolcsonzes(Integer.parseInt(tmp[6]), Integer.parseInt(tmp[7]), tmp[8], tmp[9], Integer.parseInt(tmp[10]), Integer.parseInt(tmp[11])));
+                            autoKolcsonzes.addAutok(new Auto(tmp[0], tmp[1], tmp[2], tmp[3], Integer.parseInt(tmp[4]), tmp[5]));
+                            autoKolcsonzes.addKolcsonzesek(new Kolcsonzes(Integer.parseInt(tmp[6]), Integer.parseInt(tmp[7]), tmp[8], tmp[9], Integer.parseInt(tmp[10]), Integer.parseInt(tmp[11])));
                             switch (tmp.length) {
                                 case 1:
 
@@ -243,6 +252,27 @@ public class Menu {
 
                 } catch (IOException | NullPointerException ex) {
                 }
+                try {
+                    BuffReader = new BufferedReader(new FileReader("utanfutok.txt"));
+                    {
+                        String[] tmp;
+                        while ((tmp = BuffReader.readLine().split(";")) != null) {
+                          autoKolcsonzes.getUtanfutok().add(new Utanfuto(tmp[0], tmp[1], tmp[2], Integer.parseInt(tmp[3]), tmp[4]));
+                           autoKolcsonzes.getUtanfutoKolcsonzesek().add(new UtanfutoKolcsonzes(Integer.parseInt(tmp[5]), Integer.parseInt(tmp[6]), tmp[7], tmp[8], Integer.parseInt(tmp[9]), Integer.parseInt(tmp[10])));
+                            switch (tmp.length) {
+                                case 1:
+
+                                    break;
+                            }
+                        }
+
+                    }
+
+                } catch (FileNotFoundException ex) {
+
+                } catch (IOException | NullPointerException ex) {
+                }
+
             }
         }
         ).start();
@@ -282,9 +312,9 @@ public class Menu {
                         ferohely = Integer.parseInt(input.readLine());
                         System.out.println("Auto szin:");
                         szin = input.readLine();
-                        kolcsonzesek.autok.add(new Auto(rendszam, tipus, modell, uzemanyag, ferohely, szin));
+                        autoKolcsonzes.autok.add(new Auto(rendszam, tipus, modell, uzemanyag, ferohely, szin));
                         DateFormat datum = new SimpleDateFormat("yyyy.MM.dd");
-                        kolcsonzesek.kolcsonzesek.add(new Kolcsonzes(kolcsonzesek.Meret(), -1, rendszam, datum.format(new Date()), ar, -1));
+                        autoKolcsonzes.kolcsonzesek.add(new Kolcsonzes(autoKolcsonzes.Meret(), -1, rendszam, datum.format(new Date()), ar, -1));
                         System.out.println("Auto hozzaadasa sikeresen megtortent:\n");
                         break;
                     case "2":
@@ -334,17 +364,17 @@ public class Menu {
 
                     case "2":
                         System.out.println("Kolcsonzesek:");
-                        for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                            System.out.println(i + ".     " + kolcsonzesek.kolcsonzesek.get(i).getAutorendszam() + ";" + kolcsonzesek.kolcsonzesek.get(i).getAr());
+                        for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                            System.out.println(i + ".     " + autoKolcsonzes.kolcsonzesek.get(i).getAutorendszam() + ";" + autoKolcsonzes.kolcsonzesek.get(i).getAr());
                         }
                         System.out.println("Ha nem szeretne modositani akkor nyomjon csak egy entert:");
                         String index = input.readLine();
                         if (!index.equals("")) {
-                            System.out.println("Kolcsonzes auto rendszama:" + kolcsonzesek.kolcsonzesek.get(Integer.parseInt(valasztottid)).getAutorendszam());
+                            System.out.println("Kolcsonzes auto rendszama:" + autoKolcsonzes.kolcsonzesek.get(Integer.parseInt(valasztottid)).getAutorendszam());
                             System.out.println("Auto ara:");
                             valasztottid = input.readLine();
                             if (!valasztottid.equals("")) {
-                                kolcsonzesek.kolcsonzesek.get(Integer.parseInt(index)).setAr(Integer.parseInt(valasztottid));
+                                autoKolcsonzes.kolcsonzesek.get(Integer.parseInt(index)).setAr(Integer.parseInt(valasztottid));
                                 FajlbaKiiraskolcsonzesek();
                             }
 
@@ -353,8 +383,8 @@ public class Menu {
 
                     case "3":
                         System.out.println("Autok:");
-                        for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                            System.out.println(i + ".     " + kolcsonzesek.autok.get(i).getRendszam() + ";" + kolcsonzesek.autok.get(i).getTipus() + ";" + kolcsonzesek.autok.get(i).getModell() + ";" + kolcsonzesek.autok.get(i).getSzin());
+                        for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                            System.out.println(i + ".     " + autoKolcsonzes.autok.get(i).getRendszam() + ";" + autoKolcsonzes.autok.get(i).getTipus() + ";" + autoKolcsonzes.autok.get(i).getModell() + ";" + autoKolcsonzes.autok.get(i).getSzin());
                         }
                         System.out.println("Kerem adja meg az auto sorszamat. Ha nem szeretne modositani akkor nyomjon csak egy entert:");
 
@@ -365,9 +395,9 @@ public class Menu {
                         }
 
                         if (!valasztottid.equals("")) {
-                            System.out.println("Kivalasztott auto rendszama:" + kolcsonzesek.autok.get(Integer.parseInt(valasztottid)).getRendszam());
+                            System.out.println("Kivalasztott auto rendszama:" + autoKolcsonzes.autok.get(Integer.parseInt(valasztottid)).getRendszam());
                             System.out.println("Auto szine:");
-                            kolcsonzesek.autok.get(Integer.parseInt(valasztottid)).setSzin(input.readLine());
+                            autoKolcsonzes.autok.get(Integer.parseInt(valasztottid)).setSzin(input.readLine());
                             FajlbaKiiraskolcsonzesek();
                         }
 
@@ -442,9 +472,9 @@ public class Menu {
                         break;
                     case "2":
                         System.out.println("Kikolcsonzott jarmu:\n");
-                        for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                            if (kolcsonzesek.kolcsonzesek.get(i).getUgyfelID() == jelenlegifelhasznalo.azonosito) {
-                                System.out.println(kolcsonzesek.autok.get(i).toString() + "\n");
+                        for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                            if (autoKolcsonzes.kolcsonzesek.get(i).getUgyfelID() == jelenlegifelhasznalo.azonosito) {
+                                System.out.println(autoKolcsonzes.autok.get(i).toString() + "\n");
 
                             }
                         }
@@ -454,10 +484,10 @@ public class Menu {
                         boolean kiLep=false;
                         while(!kiLep) {
                             System.out.println("Jarmuvek:");
-                            for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                                Kolcsonzes k = kolcsonzesek.kolcsonzesek.get(i);
+                            for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                                Kolcsonzes k = autoKolcsonzes.kolcsonzesek.get(i);
                                 if (k.getUgyfelID() == -1 && ((k.getAutorendszam().contains(szures))|| szures.equals("*"))) {
-                                    System.out.println(kolcsonzesek.autok.get(i) + "\n");
+                                    System.out.println(autoKolcsonzes.autok.get(i) + "\n");
                                 }
                             }
                             System.out.print("Rendszam/exit:");
@@ -468,8 +498,8 @@ public class Menu {
                         break;
                     case "4":
                         boolean van = false;
-                        for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                            if (kolcsonzesek.kolcsonzesek.get(i).getUgyfelID() == jelenlegifelhasznalo.azonosito) {
+                        for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                            if (autoKolcsonzes.kolcsonzesek.get(i).getUgyfelID() == jelenlegifelhasznalo.azonosito) {
                                 System.out.println("Kerjuk eloszor adja le a kolcsonzott autot!");
                                 van=true;
                                 break;
@@ -478,14 +508,14 @@ public class Menu {
                         if (!van) {                           
                             System.out.println("Auto kivalasztasa, kerem a rendszamat:");
                             valasztottid = input.readLine();
-                            for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                                if (kolcsonzesek.autok.get(i).getRendszam().equals(valasztottid)) {
-                                    Auto  a= kolcsonzesek.autok.get(i);
+                            for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                                if (autoKolcsonzes.autok.get(i).getRendszam().equals(valasztottid)) {
+                                    Auto  a= autoKolcsonzes.autok.get(i);
                                     System.out.println("On a kovetkezo autot akarja valasztani es kifizetni(igen/nem):" );
                                     System.out.println(a.toString());                                    
                                     String valasz = input.readLine();
                                      if (valasz.equals("igen")) {
-                                        kolcsonzesek.kolcsonzesek.get(i).setUgyfelID(((Ugyfel) jelenlegifelhasznalo).azonosito);
+                                        autoKolcsonzes.kolcsonzesek.get(i).setUgyfelID(((Ugyfel) jelenlegifelhasznalo).azonosito);
                                         //Utanfuto
                                         System.out.println("Sikeresen kikolcsonozve" );                                                 
                                      }
@@ -496,8 +526,8 @@ public class Menu {
                         break;
                     case "5":
                         int index = -1;
-                        for (int i = 0; i < kolcsonzesek.Meret(); i++) {
-                            if (kolcsonzesek.kolcsonzesek.get(i).getUgyfelID() == jelenlegifelhasznalo.azonosito) {
+                        for (int i = 0; i < autoKolcsonzes.Meret(); i++) {
+                            if (autoKolcsonzes.kolcsonzesek.get(i).getUgyfelID() == jelenlegifelhasznalo.azonosito) {
                                 index = i;
                                 break;
                             }
@@ -506,7 +536,7 @@ public class Menu {
                             System.out.println("Leadja a kolcsonzott autot? (igen/nem)");
                             valasztottid = input.readLine();
                             if (valasztottid.equals("igen")) {
-                                kolcsonzesek.kolcsonzesek.get(index).setUgyfelID(-1);                           
+                                autoKolcsonzes.kolcsonzesek.get(index).setUgyfelID(-1);                           
                                 System.out.println("Sikeresen leadta az autot");
                             }
                         } else {
