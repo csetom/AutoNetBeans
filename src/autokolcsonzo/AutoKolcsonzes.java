@@ -15,11 +15,30 @@ public class AutoKolcsonzes {
     
     ArrayList<Kolcsonzes> kolcsonzesek = new ArrayList<>();
     ArrayList<Auto> autok = new ArrayList<>();
-    
+    ArrayList<UtanfutoKolcsonzes> utanfutoKolcsonzesek = new ArrayList<>();
+    ArrayList<Utanfuto> Utanfutok = new ArrayList<>();
+
     public int Meret()
     {
         return autok.size();
     }
+
+    public ArrayList<UtanfutoKolcsonzes> getUtanfutoKolcsonzesek() {
+        return utanfutoKolcsonzesek;
+    }
+
+    public void setUtanfutoKolcsonzesek(ArrayList<UtanfutoKolcsonzes> utanfutoKolcsonzesek) {
+        this.utanfutoKolcsonzesek = utanfutoKolcsonzesek;
+    }
+
+    public ArrayList<Utanfuto> getUtanfutok() {
+        return Utanfutok;
+    }
+
+    public void setUtanfutok(ArrayList<Utanfuto> Utanfutok) {
+        this.Utanfutok = Utanfutok;
+    }
+    
     public Kolcsonzes getKolcsonzesek(int index) {
         return kolcsonzesek.get(index);
     }
