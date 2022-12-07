@@ -163,7 +163,7 @@ public class Menu {
                         writer.write(felhasznalok.get(i).toString());
                     }
                     writer.close();
-                    System.out.println("Fajlba kiiras megtortent.");
+                    System.out.println("Fajlba kiiras megtortent (felhasznalo).");
                 } catch (IOException ex) {
                     System.out.println("Nem hozhato letre a fajl!");
                 }
@@ -181,9 +181,9 @@ public class Menu {
                         writer.write(kolcsonzesek.getAutok(i).toString() + kolcsonzesek.getKolcsonzesek(i).toString());
                     }
                     writer.close();
-                    System.out.println("Fajlba kiiras megtortent.");
+                    System.out.println("Fajlba kiiras megtortent(kolcsonzesek).");
                 } catch (IOException ex) {
-                    //System.out.println("Nem hozhato letre a fajl!");
+                    System.out.println("Nem hozhato letre a fajl!");
                 }
             }
         }).start();
@@ -506,7 +506,7 @@ public class Menu {
                             System.out.println("Leadja a kolcsonzott autot? (igen/nem)");
                             valasztottid = input.readLine();
                             if (valasztottid.equals("igen")) {
-                                kolcsonzesek.kolcsonzesek.get(index).setUgyfelID(-1);
+                                kolcsonzesek.kolcsonzesek.get(index).setUgyfelID(-1);                           
                                 System.out.println("Sikeresen leadta az autot");
                             }
                         } else {
@@ -515,6 +515,8 @@ public class Menu {
                         break;
                 }
                 FajlbaKiirasfelhasznalok();
+                FajlbaKiiraskolcsonzesek();
+
             } catch (IOException ex) {
 
             }
